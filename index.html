@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#0d0e11">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="КП Маяк">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>КП на продление «Маяк»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&display=swap">
+<style>
+html,body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:#0d0e11}
+img{max-width:100%}
+/* Layout: club price-list world — graphite panels, signal red; form on the left, ready message + KP image on the right */
+:root{
+  --bg:#0d0e11; --panel:#16181d; --panel-2:#1d2026; --line:#2a2e36;
+  --fg:#eceef2; --muted:#9aa1ad; --red:#e0262b; --red-deep:#a5161b; --green:#25d366; --bubble:#1f3a2e;
+  --display:"Oswald","Arial Narrow",Arial,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--red);padding-bottom:14px;margin-bottom:20px}
+h1{font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:clamp(28px,5vw,44px);line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
+h1 span{color:var(--red)}
+header p{margin:0;color:var(--muted);max-width:44ch}
+.grid{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:17px;margin:0;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:4px;height:18px;background:var(--red);border-radius:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:13px;background:var(--panel-2);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+label{display:flex;flex-direction:column;gap:5px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);min-width:0}
+input,textarea{font:inherit;font-size:15px;text-transform:none;letter-spacing:0;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px 11px;width:100%;min-width:0}
+textarea{resize:vertical;line-height:1.45}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:12px;color:var(--muted);margin:0}
+.q-chips .chip{font-size:12px;padding:5px 9px}
+.out{display:flex;flex-direction:column;gap:20px;min-width:0}
+.bubble-wrap{background:#0b141a;border-radius:10px;padding:14px;border:1px solid var(--line)}
+#msg{background:var(--bubble);border:none;border-radius:9px 9px 9px 2px;min-height:260px;font-size:15px;color:#e9edef;padding:12px 14px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{font:inherit;font-weight:600;font-size:14px;border-radius:8px;padding:10px 16px;cursor:pointer;border:1px solid transparent;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red-deep)}
+.btn-wa{background:var(--green);color:#06210f}
+.btn-ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--muted)}
+.status{font-size:13px;color:var(--muted);min-height:1.2em}
+.phone{max-width:220px}
+#kpImg{width:100%;max-width:520px;aspect-ratio:4/5;border-radius:8px;display:block;background:var(--bg);border:1px solid var(--line)}
+canvas{display:none}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>КП на продление <span>«Маяк»</span></h1>
+    <p>Выбери карту, поправь цену и срок. Сообщение и картинка обновляются сразу.</p>
+  </header>
+
+  <div class="grid">
+    <form class="panel" id="form" autocomplete="off">
+      <h2>Карта</h2>
+      <div class="chips" id="cards" role="group" aria-label="Карта из прайса"></div>
+
+      <label for="dur">Срок / название карты
+        <input id="dur" type="text">
+      </label>
+      <div class="row">
+        <label for="price">Цена продления, ₽
+          <input id="price" type="text" inputmode="numeric">
+        </label>
+        <label for="base">Цена для новых, ₽
+          <input id="base" type="text" inputmode="numeric" placeholder="не показывать">
+        </label>
+      </div>
+      <label for="feats">Что входит (каждый пункт с новой строки)
+        <textarea id="feats" rows="4"></textarea>
+      </label>
+      <label for="tag">Пометка
+        <input id="tag" type="text" placeholder="например: Акция месяца">
+      </label>
+
+      <h2>Клиент</h2>
+      <div class="row">
+        <label for="name">Имя клиента
+          <input id="name" type="text" placeholder="Анна">
+        </label>
+        <label for="endDate">Карта заканчивается
+          <input id="endDate" type="text" placeholder="15 октября">
+        </label>
+      </div>
+      <label for="until">Цена действует до
+        <input id="until" type="text" placeholder="31 октября">
+      </label>
+      <label for="question">Вопрос в конце
+        <input id="question" type="text">
+      </label>
+      <div class="chips q-chips" id="qchips"></div>
+      <label for="mgr">Твоё имя
+        <input id="mgr" type="text">
+      </label>
+    </form>
+
+    <div class="out">
+      <section class="panel" aria-labelledby="h-msg">
+        <h2 id="h-msg">Сообщение для WhatsApp</h2>
+        <div class="bubble-wrap">
+          <textarea id="msg" aria-label="Текст сообщения"></textarea>
+        </div>
+        <p class="hint">Текст можно поправить прямо здесь. Если потом поменять поля слева, он соберётся заново.</p>
+        <div class="actions">
+          <button class="btn btn-red" type="button" id="copyBtn">Скопировать текст</button>
+          <input class="phone" id="phone" type="tel" inputmode="tel" placeholder="Телефон клиента" aria-label="Телефон клиента">
+          <a class="btn btn-wa" id="waLink" href="https://wa.me/" target="_blank" rel="noopener">Открыть в WhatsApp</a>
+        </div>
+        <div class="status" id="msgStatus" role="status"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="h-img">
+        <h2 id="h-img">Картинка-КП</h2>
+        <img id="kpImg" alt="Картинка с предложением на продление">
+        <div class="actions">
+          <button class="btn btn-wa" type="button" id="shareBtn" hidden>Отправить картинку</button>
+          <button class="btn btn-red" type="button" id="saveBtn">Скачать картинку</button>
+          <button class="btn btn-ghost" type="button" id="copyImgBtn">Скопировать картинку</button>
+        </div>
+        <p class="hint" id="imgHint">На телефоне можно зажать картинку и выбрать «Сохранить».</p>
+        <div class="status" id="imgStatus" role="status"></div>
+      </section>
+    </div>
+  </div>
+  <canvas id="cv" width="1080" height="1350"></canvas>
+</div>
+
+<script>
+const CARDS = [
+  {id:'1m',  label:'1 месяц',   dur:'1 месяц',   price:9900,  base:10900, feats:['4 персональные тренировки']},
+  {id:'3m',  label:'3 месяца',  dur:'3 месяца',  price:15900, base:17900, feats:['4 персональные тренировки']},
+  {id:'6m',  label:'6 месяцев', dur:'6 месяцев', price:23900, base:26900, feats:['30 дней заморозки','1 гостевой визит','4 персональные тренировки']},
+  {id:'12m', label:'12 месяцев',dur:'12 месяцев',price:34900, base:38900, feats:['60 дней заморозки','3 гостевых визита','4 персональные тренировки']},
+  {id:'promo', label:'Акция · 8 месяцев', dur:'8 месяцев', price:28900, base:32900, tag:'Акция месяца', feats:['60 дней заморозки','2 гостевых визита','4 персональные тренировки']},
+  {id:'family', label:'Семейная', dur:'12 месяцев, семейная карта', price:56800, base:61800, feats:['1 взрослый + дети до 14 лет','60 дней заморозки','3 гостевых визита']},
+  {id:'gold1', label:'Gold · перс. тренер', dur:'Gold — персональный тренер', price:75900, base:null, feats:['Всё наполнение клубной карты','16 персональных тренировок','90 дней заморозки','3 гостевых визита','50 полотенец','10 минут солярия']},
+  {id:'gold2', label:'Gold · мастер', dur:'Gold — мастер', price:90900, base:null, feats:['Всё наполнение клубной карты','16 персональных тренировок','90 дней заморозки','3 гостевых визита','50 полотенец','10 минут солярия']},
+  {id:'kids1', label:'Детская 3–6 лет', dur:'12 месяцев, детская 3–6 лет', price:26900, base:null, feats:['60 дней заморозки']},
+  {id:'kids2', label:'Детская 7–14 лет', dur:'12 месяцев, детская 7–14 лет', price:29900, base:null, feats:['60 дней заморозки']},
+];
+const QUESTIONS = ['Планируете продолжать занятия?','Продлеваем?','Вам удобно продлить на этой неделе?','Подскажите, какой срок вам интереснее?'];
+
+const $ = id => document.getElementById(id);
+const F = ['dur','price','base','feats','tag','name','endDate','until','question','mgr'];
+const num = s => { const d = String(s||'').replace(/\D/g,''); return d ? parseInt(d,10) : null; };
+const rub = n => n.toLocaleString('ru-RU').replace(/ | /g,' ');
+let current = '6m';
+
+function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+
+// chips
+const cardsEl = $('cards');
+CARDS.forEach(c=>{
+  const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=c.label; b.dataset.id=c.id;
+  b.addEventListener('click',()=>pick(c.id)); cardsEl.appendChild(b);
+});
+const qEl=$('qchips');
+QUESTIONS.forEach(q=>{
+  const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=q;
+  b.addEventListener('click',()=>{ $('question').value=q; update(); }); qEl.appendChild(b);
+});
+
+function pick(id){
+  const c = CARDS.find(x=>x.id===id); current=id;
+  $('dur').value=c.dur; $('price').value=rub(c.price); $('base').value=c.base?rub(c.base):'';
+  $('feats').value=c.feats.join('\n'); $('tag').value=c.tag||'';
+  [...cardsEl.children].forEach(b=>b.setAttribute('aria-pressed', b.dataset.id===id?'true':'false'));
+  update();
+}
+
+function data(){
+  const v={}; F.forEach(k=>v[k]=$(k).value.trim());
+  v.priceN=num(v.price); v.baseN=num(v.base);
+  v.featList=v.feats.split('\n').map(s=>s.trim()).filter(Boolean);
+  return v;
+}
+
+function buildMsg(v){
+  const L=[];
+  const greet = v.name ? `Добрый день, ${v.name}!` : 'Добрый день!';
+  L.push(`${greet} Это ${v.mgr||'менеджер'}, фитнес-клуб «Маяк».`);
+  L.push(v.endDate
+    ? `Ваша карта заканчивается ${v.endDate}, и для вас есть специальная цена на продление:`
+    : 'Для вас как для нашего клиента есть специальная цена на продление:');
+  L.push('');
+  let offer = `${v.tag ? v.tag+': ' : ''}*${v.dur||'Клубная карта'}${v.priceN ? ' — '+rub(v.priceN)+' ₽' : ''}*`;
+  if (v.baseN && v.priceN && v.baseN>v.priceN) offer += ` (для новых клиентов ${rub(v.baseN)} ₽)`;
+  L.push(offer);
+  v.featList.forEach(f=>L.push('• '+f));
+  if (v.until){ L.push(''); L.push(`Цена действует до ${v.until}.`); }
+  L.push('');
+  L.push(v.question||'Планируете продолжать занятия?');
+  return L.join('\n');
+}
+
+function waHref(){
+  let p = $('phone').value.replace(/\D/g,'');
+  if (p.length===11 && p[0]==='8') p='7'+p.slice(1);
+  if (p.length===10) p='7'+p;
+  return `https://wa.me/${p}?text=${encodeURIComponent($('msg').value)}`;
+}
+
+/* ---------- canvas KP ---------- */
+const cv=$('cv'), ctx=cv.getContext('2d');
+const W=1080,H=1350, PAD=72;
+const C={bg:'#0d0e11',panel:'#17191e',line:'#2c3039',fg:'#f2f3f5',muted:'#9aa1ad',red:'#e0262b',redDeep:'#9e1418'};
+const DISP='"Oswald","Arial Narrow",Arial,sans-serif', BODY='"Golos Text",Arial,sans-serif';
+
+function wrap(text,maxW){
+  const words=text.split(/\s+/); const lines=[]; let line='';
+  words.forEach(w=>{ const t=line?line+' '+w:w; if(ctx.measureText(t).width>maxW && line){ lines.push(line); line=w; } else line=t; });
+  if(line) lines.push(line); return lines;
+}
+function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function fitFont(text,weight,family,size,maxW,min){ let s=size; do{ ctx.font=`${weight} ${s}px ${family}`; if(ctx.measureText(text).width<=maxW) break; s-=4; }while(s>min); return s; }
+
+function draw(v){
+  ctx.fillStyle=C.bg; ctx.fillRect(0,0,W,H);
+  const g=ctx.createRadialGradient(W*0.9,90,20,W*0.9,90,700); g.addColorStop(0,'rgba(224,38,43,0.28)'); g.addColorStop(1,'rgba(224,38,43,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  ctx.textBaseline='alphabetic';
+
+  // brand
+  ctx.fillStyle=C.red; ctx.font=`700 64px ${DISP}`; ctx.fillText('МАЯК',PAD,PAD+56);
+  ctx.fillStyle=C.muted; ctx.font=`500 22px ${BODY}`; ctx.fillText('Ф И Т Н Е С   К Л У Б',PAD,PAD+92);
+  if(v.tag){
+    ctx.font=`600 26px ${DISP}`; const t=v.tag.toUpperCase(); const tw=ctx.measureText(t).width+44;
+    ctx.fillStyle=C.red; rr(W-PAD-tw,PAD+14,tw,54,27); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.fillText(t,W-PAD-tw+22,PAD+50);
+  }
+
+  // title
+  let y=PAD+220;
+  ctx.fillStyle=C.fg; ctx.font=`700 118px ${DISP}`; ctx.fillText('ПРОДЛЕНИЕ',PAD,y);
+  y+=96; ctx.fillStyle=C.red; ctx.font=`700 84px ${DISP}`; ctx.fillText('КЛУБНОЙ КАРТЫ',PAD,y);
+  y+=18; ctx.fillStyle=C.red; ctx.fillRect(PAD,y,W-PAD*2,3);
+  y+=58;
+  ctx.fillStyle=C.muted; ctx.font=`500 34px ${BODY}`;
+  ctx.fillText(v.name ? `Специальное предложение для: ${v.name}` : 'Специальная цена для наших клиентов', PAD, y);
+
+  // offer block
+  const feats=(v.featList.length?v.featList:['Клубная карта «Маяк»']).slice(0,6);
+  const many=feats.length>4, fs=many?28:34, step=many?50:68;
+  const dur=v.dur||'Клубная карта';
+  const m=dur.match(/^(\d+)\s*([^,—-]*)(.*)$/);
+  const rest=m?(m[3]||'').replace(/^[,\s—-]+/,'').trim():'';
+  const bx=PAD, by=y+40, bw=W-PAD*2, lw=300;
+  const bh=Math.max(rest?380:300, (feats.length-1)*step+fs+110);
+  ctx.fillStyle=C.panel; rr(bx,by,bw,bh,18); ctx.fill();
+  ctx.save(); rr(bx,by,bw,bh,18); ctx.clip();
+  const lg=ctx.createLinearGradient(bx,by,bx,by+bh); lg.addColorStop(0,C.red); lg.addColorStop(1,C.redDeep);
+  ctx.fillStyle=lg; ctx.fillRect(bx,by,lw,bh); ctx.restore();
+  ctx.strokeStyle=C.line; ctx.lineWidth=2; rr(bx,by,bw,bh,18); ctx.stroke();
+
+  ctx.fillStyle='#fff'; ctx.textAlign='center';
+  if(m){
+    const n=m[1]; const word=(m[2]||'').trim().toUpperCase();
+    const s=fitFont(n,'700',DISP,190,lw-40,90);
+    const restLines = rest ? (ctx.font=`500 24px ${BODY}`, wrap(rest,lw-40).slice(0,2)) : [];
+    const ch = s*0.72 + 52 + restLines.length*32 + (restLines.length?10:0);
+    let ty = by + (bh-ch)/2 + s*0.72;
+    ctx.font=`700 ${s}px ${DISP}`; ctx.fillText(n,bx+lw/2,ty);
+    ty+=52; ctx.font=`600 36px ${DISP}`; ctx.fillText(word,bx+lw/2,ty);
+    ty+=10; ctx.font=`500 24px ${BODY}`; restLines.forEach(l=>{ ty+=32; ctx.fillText(l,bx+lw/2,ty); });
+  } else {
+    const up=dur.toUpperCase(); let fsz=46;
+    const longest=up.split(/\s+/).reduce((a,w)=>w.length>a.length?w:a,'');
+    fsz=fitFont(longest,'700',DISP,46,lw-36,22);
+    ctx.font=`700 ${fsz}px ${DISP}`; const ls=wrap(up,lw-36).slice(0,4); const lh=fsz*1.18;
+    const sy=by+bh/2-(ls.length-1)*lh/2+fsz*0.36; ls.forEach((l,i)=>ctx.fillText(l,bx+lw/2,sy+i*lh));
+  }
+  ctx.textAlign='left';
+
+  // features, centred vertically in the panel
+  const fx=bx+lw+44, fw=bw-lw-80;
+  let fy=by+(bh-(feats.length-1)*step)/2+fs*0.35;
+  ctx.font=`500 ${fs}px ${BODY}`;
+  feats.forEach(f=>{
+    ctx.fillStyle=C.red; ctx.beginPath(); ctx.arc(fx+8,fy-fs*0.33,7,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=C.fg; ctx.fillText(wrap(f,fw-34)[0],fx+34,fy); fy+=step;
+  });
+
+  // price
+  const ly=by+bh+68;
+  ctx.fillStyle=C.red; ctx.font=`600 30px ${DISP}`; ctx.fillText('ВАША ЦЕНА ПРОДЛЕНИЯ',PAD,ly);
+  const py=ly+138;
+  const priceTxt = v.priceN ? rub(v.priceN)+' ₽' : '— ₽';
+  const ps=fitFont(priceTxt,'700',DISP,150,600,80);
+  ctx.fillStyle=C.fg; ctx.font=`700 ${ps}px ${DISP}`; ctx.fillText(priceTxt,PAD,py);
+  const pw=ctx.measureText(priceTxt).width;
+  if(v.baseN && v.priceN && v.baseN>v.priceN){
+    const ox=PAD+pw+44; const ot=rub(v.baseN)+' ₽';
+    ctx.fillStyle=C.muted; ctx.font=`500 28px ${BODY}`; ctx.fillText('для новых клиентов',ox,py-62);
+    ctx.font=`600 52px ${DISP}`; ctx.fillText(ot,ox,py-4);
+    const ow=ctx.measureText(ot).width; ctx.strokeStyle=C.red; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.moveTo(ox-4,py-20); ctx.lineTo(ox+ow+4,py-24); ctx.stroke();
+  }
+  if(v.until){ ctx.fillStyle=C.fg; ctx.font=`600 32px ${BODY}`; ctx.fillText(`Цена действует до ${v.until}`,PAD,py+66); }
+
+  // footer
+  const fy2=H-PAD-40;
+  ctx.fillStyle=C.line; ctx.fillRect(PAD,fy2-30,W-PAD*2,2);
+  ctx.fillStyle=C.muted; ctx.font=`500 26px ${BODY}`;
+  ctx.fillText(v.mgr ? `${v.mgr}, фитнес-клуб «Маяк»` : 'Фитнес-клуб «Маяк»', PAD, fy2+16);
+  ctx.textAlign='right'; ctx.fillText('Ваш фитнес. Ваш ритм. Ваш результат.', W-PAD, fy2+16); ctx.textAlign='left';
+
+  $('kpImg').src=cv.toDataURL('image/png');
+}
+
+let t=null;
+function update(){
+  const v=data();
+  $('msg').value=buildMsg(v);
+  $('waLink').href=waHref();
+  clearTimeout(t); t=setTimeout(()=>draw(v),120);
+  store('kp_mgr',v.mgr);
+}
+
+F.forEach(k=>$(k).addEventListener('input',()=>{
+  if(['dur','price','base','feats','tag'].includes(k)) [...cardsEl.children].forEach(b=>b.setAttribute('aria-pressed','false'));
+  update();
+}));
+$('msg').addEventListener('input',()=>{$('waLink').href=waHref();});
+$('phone').addEventListener('input',()=>{$('waLink').href=waHref();});
+$('form').addEventListener('submit',e=>e.preventDefault());
+
+function flash(el,txt){ el.textContent=txt; clearTimeout(el._t); el._t=setTimeout(()=>el.textContent='',3000); }
+
+$('copyBtn').addEventListener('click',()=>{
+  const ta=$('msg');
+  const fallback=()=>{ ta.focus(); ta.select(); let ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+    flash($('msgStatus'), ok ? 'Скопировано. Вставь в чат с клиентом.' : 'Текст выделен — нажми «Копировать».'); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(()=>flash($('msgStatus'),'Скопировано. Вставь в чат с клиентом.')).catch(fallback);
+  } else fallback();
+});
+
+function blobFromCanvas(){ return new Promise(r=>cv.toBlob(r,'image/png')); }
+
+$('copyImgBtn').addEventListener('click',()=>{
+  try{
+    if(!window.ClipboardItem || !navigator.clipboard || !navigator.clipboard.write) throw 0;
+    navigator.clipboard.write([new ClipboardItem({'image/png':blobFromCanvas()})])
+      .then(()=>flash($('imgStatus'),'Картинка скопирована. Вставь её в чат.'))
+      .catch(()=>flash($('imgStatus'),'Здесь копирование картинки не работает. Сохрани её через «Скачать» или зажми картинку.'));
+  }catch(e){ flash($('imgStatus'),'Здесь копирование картинки не работает. Сохрани её через «Скачать» или зажми картинку.'); }
+});
+
+function fileName(){
+  const v=data();
+  return ('KP_Mayak_'+(v.name||'klient')+'_'+(v.dur||'karta')).replace(/[^\wА-Яа-яЁё]+/g,'_').slice(0,80)+'.png';
+}
+$('saveBtn').addEventListener('click',async()=>{
+  try{
+    const blob=await blobFromCanvas(); const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=fileName(); document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+    flash($('imgStatus'),'Картинка сохранена в «Загрузки».');
+  }catch(e){ flash($('imgStatus'),'Скачать не получилось. Зажми картинку и выбери «Сохранить».'); }
+});
+(async()=>{
+  try{
+    const probe=new File([new Blob(['x'],{type:'image/png'})],'t.png',{type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[probe]})){ $('shareBtn').hidden=false; $('imgHint').textContent='«Отправить картинку» открывает меню телефона, оттуда можно сразу выбрать WhatsApp.'; }
+  }catch(e){}
+})();
+$('shareBtn').addEventListener('click',async()=>{
+  try{
+    const blob=await blobFromCanvas();
+    const file=new File([blob],fileName(),{type:'image/png'});
+    await navigator.share({files:[file]});
+  }catch(e){ if(!e || e.name!=='AbortError') flash($('imgStatus'),'Не получилось открыть меню. Скачай картинку и отправь её из галереи.'); }
+});
+
+// init
+$('mgr').value = load('kp_mgr') || 'Павел';
+$('question').value = QUESTIONS[0];
+
+pick(current);
+(document.fonts ? Promise.all([
+  document.fonts.load(`700 100px Oswald`), document.fonts.load(`600 30px Oswald`),
+  document.fonts.load(`500 30px "Golos Text"`), document.fonts.load(`600 30px "Golos Text"`)
+]).catch(()=>{}) : Promise.resolve()).then(()=>draw(data()));
+</script>
+
+<script>
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
+</script>
+</body>
+</html>
