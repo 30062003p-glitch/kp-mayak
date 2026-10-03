@@ -11,7 +11,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>КП на продление «Маяк»</title>
+<title>КП «Маяк»</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Golos+Text:wght@400;500;600;700&display=swap">
@@ -19,7 +19,7 @@
 html,body{margin:0}
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:#0d0e11}
 img{max-width:100%}
-/* Layout: club price-list world — graphite panels, signal red; form on the left, ready message + KP image on the right */
+/* Layout: club price-list world — graphite panels, signal red; tabs on top, form left, message + KP image right */
 :root{
   --bg:#0d0e11; --panel:#16181d; --panel-2:#1d2026; --line:#2a2e36;
   --fg:#eceef2; --muted:#9aa1ad; --red:#e0262b; --red-deep:#a5161b; --green:#25d366; --bubble:#1f3a2e;
@@ -30,10 +30,14 @@ img{max-width:100%}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
 .wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--red);padding-bottom:14px;margin-bottom:20px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
 h1{font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:clamp(28px,5vw,44px);line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
 h1 span{color:var(--red)}
 header p{margin:0;color:var(--muted);max-width:44ch}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--red);margin-bottom:20px}
+.tab{font:inherit;font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:.05em;text-transform:uppercase;background:transparent;color:var(--muted);border:none;border-radius:8px 8px 0 0;padding:11px 18px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--red);color:#fff}
+.tab:hover:not([aria-selected="true"]){color:var(--fg)}
 .grid{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:20px;align-items:start}
 @media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
@@ -43,7 +47,7 @@ header p{margin:0;color:var(--muted);max-width:44ch}
 .chip{font:inherit;font-size:13px;background:var(--panel-2);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer;transition:background .15s,border-color .15s}
 .chip:hover{border-color:var(--muted)}
 .chip[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
-.chip:focus-visible,.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.chip:focus-visible,.btn:focus-visible,.tab:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 label{display:flex;flex-direction:column;gap:5px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);min-width:0}
 input,textarea{font:inherit;font-size:15px;text-transform:none;letter-spacing:0;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:9px 11px;width:100%;min-width:0}
 textarea{resize:vertical;line-height:1.45}
@@ -52,7 +56,7 @@ textarea{resize:vertical;line-height:1.45}
 .q-chips .chip{font-size:12px;padding:5px 9px}
 .out{display:flex;flex-direction:column;gap:20px;min-width:0}
 .bubble-wrap{background:#0b141a;border-radius:10px;padding:14px;border:1px solid var(--line)}
-#msg{background:var(--bubble);border:none;border-radius:9px 9px 9px 2px;min-height:260px;font-size:15px;color:#e9edef;padding:12px 14px}
+#msg{background:var(--bubble);border:none;border-radius:9px 9px 9px 2px;min-height:300px;font-size:15px;color:#e9edef;padding:12px 14px}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .btn{font:inherit;font-weight:600;font-size:14px;border-radius:8px;padding:10px 16px;cursor:pointer;border:1px solid transparent;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .btn-red{background:var(--red);color:#fff}
@@ -62,33 +66,37 @@ textarea{resize:vertical;line-height:1.45}
 .btn-ghost:hover{border-color:var(--muted)}
 .status{font-size:13px;color:var(--muted);min-height:1.2em}
 .phone{max-width:220px}
-#kpImg{width:100%;max-width:520px;aspect-ratio:4/5;border-radius:8px;display:block;background:var(--bg);border:1px solid var(--line)}
+#kpImg{width:100%;max-width:520px;height:auto;border-radius:8px;display:block;background:var(--bg);border:1px solid var(--line)}
 canvas{display:none}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-
 <div class="wrap">
   <header>
-    <h1>КП на продление <span>«Маяк»</span></h1>
+    <h1>КП <span>«Маяк»</span></h1>
     <p>Выбери карту, поправь цену и срок. Сообщение и картинка обновляются сразу.</p>
   </header>
 
+  <div class="tabs" role="tablist" aria-label="Тип КП">
+    <button class="tab" role="tab" id="tab-renew" data-mode="renew" aria-selected="true">Продление</button>
+    <button class="tab" role="tab" id="tab-new" data-mode="new" aria-selected="false">Новый клиент</button>
+  </div>
+
   <div class="grid">
     <form class="panel" id="form" autocomplete="off">
-      <h2>Карта</h2>
+      <h2 id="h-card">Карта</h2>
       <div class="chips" id="cards" role="group" aria-label="Карта из прайса"></div>
 
       <label for="dur">Срок / название карты
         <input id="dur" type="text">
       </label>
       <div class="row">
-        <label for="price">Цена продления, ₽
+        <label for="price"><span id="lbl-price">Цена продления, ₽</span>
           <input id="price" type="text" inputmode="numeric">
         </label>
-        <label for="base">Цена для новых, ₽
+        <label for="base"><span id="lbl-base">Цена для новых, ₽</span>
           <input id="base" type="text" inputmode="numeric" placeholder="не показывать">
         </label>
       </div>
@@ -104,13 +112,35 @@ canvas{display:none}
         <label for="name">Имя клиента
           <input id="name" type="text" placeholder="Анна">
         </label>
-        <label for="endDate">Карта заканчивается
+        <label for="endDate" data-only="renew">Карта заканчивается
           <input id="endDate" type="text" placeholder="15 октября">
         </label>
+        <label for="until2" data-only="new">Предложение до
+          <input id="until2" type="text" placeholder="31 октября">
+        </label>
       </div>
-      <label for="until">Цена действует до
+      <div data-only="new">
+        <label>Откуда клиент</label>
+        <div class="chips" id="srcChips" style="margin-top:6px"></div>
+      </div>
+      <label for="until" data-only="renew">Цена действует до
         <input id="until" type="text" placeholder="31 октября">
       </label>
+
+      <div data-only="new" style="display:flex;flex-direction:column;gap:14px">
+        <h2>Клуб</h2>
+        <label for="address">Адрес клуба
+          <input id="address" type="text" placeholder="улица, дом">
+        </label>
+        <label for="zones">Зоны клуба (каждая с новой строки)
+          <textarea id="zones" rows="7"></textarea>
+        </label>
+      </div>
+
+      <label for="pay">Про оплату
+        <textarea id="pay" rows="3"></textarea>
+      </label>
+      <div><button class="chip" type="button" id="resetPay">Вернуть стандартный текст про оплату</button></div>
       <label for="question">Вопрос в конце
         <input id="question" type="text">
       </label>
@@ -137,7 +167,7 @@ canvas{display:none}
 
       <section class="panel" aria-labelledby="h-img">
         <h2 id="h-img">Картинка-КП</h2>
-        <img id="kpImg" alt="Картинка с предложением на продление">
+        <img id="kpImg" alt="Картинка с предложением">
         <div class="actions">
           <button class="btn btn-wa" type="button" id="shareBtn" hidden>Отправить картинку</button>
           <button class="btn btn-red" type="button" id="saveBtn">Скачать картинку</button>
@@ -152,72 +182,229 @@ canvas{display:none}
 </div>
 
 <script>
-const CARDS = [
-  {id:'1m',  label:'1 месяц',   dur:'1 месяц',   price:9900,  base:10900, feats:['4 персональные тренировки']},
-  {id:'3m',  label:'3 месяца',  dur:'3 месяца',  price:15900, base:17900, feats:['4 персональные тренировки']},
-  {id:'6m',  label:'6 месяцев', dur:'6 месяцев', price:23900, base:26900, feats:['30 дней заморозки','1 гостевой визит','4 персональные тренировки']},
-  {id:'12m', label:'12 месяцев',dur:'12 месяцев',price:34900, base:38900, feats:['60 дней заморозки','3 гостевых визита','4 персональные тренировки']},
-  {id:'promo', label:'Акция · 8 месяцев', dur:'8 месяцев', price:28900, base:32900, tag:'Акция месяца', feats:['60 дней заморозки','2 гостевых визита','4 персональные тренировки']},
-  {id:'family', label:'Семейная', dur:'12 месяцев, семейная карта', price:56800, base:61800, feats:['1 взрослый + дети до 14 лет','60 дней заморозки','3 гостевых визита']},
-  {id:'gold1', label:'Gold · перс. тренер', dur:'Gold — персональный тренер', price:75900, base:null, feats:['Всё наполнение клубной карты','16 персональных тренировок','90 дней заморозки','3 гостевых визита','50 полотенец','10 минут солярия']},
-  {id:'gold2', label:'Gold · мастер', dur:'Gold — мастер', price:90900, base:null, feats:['Всё наполнение клубной карты','16 персональных тренировок','90 дней заморозки','3 гостевых визита','50 полотенец','10 минут солярия']},
-  {id:'kids1', label:'Детская 3–6 лет', dur:'12 месяцев, детская 3–6 лет', price:26900, base:null, feats:['60 дней заморозки']},
-  {id:'kids2', label:'Детская 7–14 лет', dur:'12 месяцев, детская 7–14 лет', price:29900, base:null, feats:['60 дней заморозки']},
+/* ====== ПРАЙС И ТЕКСТЫ ======
+   price — цена в КП, base — цена, которая показывается рядом (зачёркнутая). Цифры без пробелов.
+   type: std — обычная карта, gold — VIP, family — семейная, kids — детская */
+const ADDRESS = 'Головинское шоссе, 10Б';
+const CLUB_HOURS = 'каждый день с 7:00 до 0:00';
+const SALES_HOURS = 'каждый день с 10:00 до 22:00';
+const CLUB_HOURS_SHORT = '7:00–0:00', SALES_HOURS_SHORT = '10:00–22:00';
+const ZONES = ['🏊 Бассейн 25 м на 6 дорожек','🏋️ Тренажёрный зал','🏃 Кардио-зона','🥊 Зона единоборств','🧖 Финская сауна','💃 3 зала групповых занятий','🧸 Детский клуб'];
+
+const PAY = {
+  renew:'Оплатить можно онлайн: пришлю ссылку на оплату сюда в чат. Новый контракт активируется в течение 30 дней после окончания текущего.',
+  new:'Оплатить можно онлайн: пришлю ссылку на оплату сюда в чат. Активация нового контракта — в течение 30 дней с момента первого визита.'
+};
+const PAY_IMG = {
+  renew:'Оплата по ссылке · активация в течение 30 дней после текущего контракта',
+  new:'Оплата по ссылке · активация в течение 30 дней с первого визита'
+};
+
+const GOLD_FEATS = ['✨ Всё наполнение клубной карты','💪 16 персональных тренировок','❄️ 90 дней заморозки','👥 3 гостевых визита','🧺 50 полотенец','☀️ 10 минут солярия'];
+const FAMILY_FEATS = ['❄️ 60 дней заморозки','🎟 3 гостевых визита'];
+const FAMILY_COMBO = '👨‍👩‍👧 1 взрослая карта + 1 детская для ребёнка до 14 лет';
+const KIDS_FEATS = ['🤸 Бесплатные групповые занятия по расписанию','🏊 Бассейн вместе с родителем','❄️ 60 дней заморозки'];
+
+// Продление: цены для клиентов продления, рядом — цена для новых
+const RENEW_CARDS = [
+  {id:'1m',  type:'std', label:'1 месяц',   dur:'1 месяц',   price:9900,  base:10900, feats:['4 персональные тренировки']},
+  {id:'3m',  type:'std', label:'3 месяца',  dur:'3 месяца',  price:15900, base:17900, feats:['4 персональные тренировки']},
+  {id:'6m',  type:'std', label:'6 месяцев', dur:'6 месяцев', price:23900, base:26900, feats:['30 дней заморозки','1 гостевой визит','4 персональные тренировки']},
+  {id:'promo', type:'std', label:'Акция · 8 месяцев', dur:'8 месяцев', price:28900, base:32900, tag:'Акция месяца', feats:['60 дней заморозки','2 гостевых визита','4 персональные тренировки']},
+  {id:'12m', type:'std', label:'12 месяцев',dur:'12 месяцев',price:34900, base:38900, feats:['60 дней заморозки','3 гостевых визита','4 персональные тренировки']},
+  {id:'family', type:'family', label:'Семейная', dur:'12 месяцев', price:56800, base:61800, feats:FAMILY_FEATS},
+  {id:'kids1', type:'kids', age:'3–6 лет',  label:'Детская 3–6 лет',  dur:'12 месяцев', price:26900, base:null, feats:KIDS_FEATS},
+  {id:'kids2', type:'kids', age:'7–14 лет', label:'Детская 7–14 лет', dur:'12 месяцев', price:29900, base:null, feats:KIDS_FEATS},
 ];
-const QUESTIONS = ['Планируете продолжать занятия?','Продлеваем?','Вам удобно продлить на этой неделе?','Подскажите, какой срок вам интереснее?'];
+
+// Новые клиенты: цены для новых; base можно вписать, если даёте скидку (покажется зачёркнутой)
+const NEW_CARDS = [
+  {id:'promo', type:'std', label:'Акция · 8 месяцев', dur:'8 месяцев', price:32900, base:null, tag:'Акция месяца', feats:['60 дней заморозки','2 гостевых визита','4 персональные тренировки']},
+  {id:'1m',  type:'std', label:'1 месяц',   dur:'1 месяц',   price:10900, base:null, feats:['4 персональные тренировки']},
+  {id:'3m',  type:'std', label:'3 месяца',  dur:'3 месяца',  price:17900, base:null, feats:['4 персональные тренировки']},
+  {id:'6m',  type:'std', label:'6 месяцев', dur:'6 месяцев', price:26900, base:null, feats:['30 дней заморозки','1 гостевой визит','4 персональные тренировки']},
+  {id:'12m', type:'std', label:'12 месяцев',dur:'12 месяцев',price:38900, base:null, feats:['60 дней заморозки','3 гостевых визита','4 персональные тренировки']},
+  {id:'gold1', type:'gold', label:'Gold · перс. тренер', dur:'Gold — персональный тренер', price:75900, base:null, feats:GOLD_FEATS},
+  {id:'gold2', type:'gold', label:'Gold · мастер', dur:'Gold — мастер', price:90900, base:null, feats:GOLD_FEATS},
+  {id:'family', type:'family', label:'Семейная', dur:'12 месяцев', price:61800, base:65800, feats:FAMILY_FEATS},
+  {id:'kids1', type:'kids', age:'3–6 лет',  label:'Детская 3–6 лет',  dur:'12 месяцев', price:26900, base:null, feats:KIDS_FEATS},
+  {id:'kids2', type:'kids', age:'7–14 лет', label:'Детская 7–14 лет', dur:'12 месяцев', price:29900, base:null, feats:KIDS_FEATS},
+];
+
+const QUESTIONS = {
+  renew:[
+    'Планируете продолжать занятия?',
+    'Продлеваем?',
+    'Отправить ссылку на оплату, чтобы закрепить эту цену?',
+    'Вам удобнее оплатить по ссылке или в клубе?',
+    'Какой срок вам удобнее: 6 или 12 месяцев?',
+    'Оформим сегодня, пока действует цена?',
+    'Если что-то смущает, напишите — подберём удобный вариант',
+  ],
+  new:[
+    'Когда вам удобно прийти на презентацию клуба?',
+    'Записать вас на презентацию клуба?',
+    'Какой день на этой неделе вам удобен для визита?',
+    'Отправить ссылку на оплату, чтобы закрепить цену?',
+    'Вам удобнее оплатить по ссылке или при визите?',
+    'Оформляем карту по этой цене?',
+    'Остались вопросы? С радостью отвечу',
+  ]
+};
+const SOURCES = [
+  {id:'phone', label:'Говорили по телефону', line:'Как договаривались по телефону, отправляю информацию о клубе и тарифе.'},
+  {id:'visit', label:'Был в клубе', line:'Спасибо, что заглянули к нам! Как договаривались, отправляю информацию о клубе и тарифе.'},
+  {id:'lead',  label:'Оставил заявку', line:'Спасибо за заявку! Коротко расскажу о клубе и о выгодном варианте для вас.'},
+];
+/* ====== конец прайса и текстов ====== */
 
 const $ = id => document.getElementById(id);
-const F = ['dur','price','base','feats','tag','name','endDate','until','question','mgr'];
 const num = s => { const d = String(s||'').replace(/\D/g,''); return d ? parseInt(d,10) : null; };
 const rub = n => n.toLocaleString('ru-RU').replace(/ | /g,' ');
-let current = '6m';
-
 function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+const EMOJI_RE = /^([\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}️‍]+)\s*/u;
+const stripEmoji = s => s.replace(EMOJI_RE,'');
+const hasEmoji = s => EMOJI_RE.test(s);
 
-// chips
-const cardsEl = $('cards');
-CARDS.forEach(c=>{
-  const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=c.label; b.dataset.id=c.id;
-  b.addEventListener('click',()=>pick(c.id)); cardsEl.appendChild(b);
-});
-const qEl=$('qchips');
-QUESTIONS.forEach(q=>{
-  const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=q;
-  b.addEventListener('click',()=>{ $('question').value=q; update(); }); qEl.appendChild(b);
-});
+const MODE_FIELDS = ['dur','price','base','feats','tag','name','endDate','until','until2','question','pay'];
+let mode = 'renew';
+let source = 'phone';
+const saved = {renew:null, new:null};
+const picked = {renew:'6m', new:'promo'};
+const cardsOf = m => m==='renew' ? RENEW_CARDS : NEW_CARDS;
+const currentCard = () => cardsOf(mode).find(c=>c.id===picked[mode]) || cardsOf(mode)[0];
 
+const cardsEl=$('cards'), qEl=$('qchips'), srcEl=$('srcChips');
+
+function renderCards(){
+  cardsEl.innerHTML='';
+  cardsOf(mode).forEach(c=>{
+    const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=c.label; b.dataset.id=c.id;
+    b.setAttribute('aria-pressed', picked[mode]===c.id?'true':'false');
+    b.addEventListener('click',()=>pick(c.id)); cardsEl.appendChild(b);
+  });
+  qEl.innerHTML='';
+  QUESTIONS[mode].forEach(q=>{
+    const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=q;
+    b.addEventListener('click',()=>{ $('question').value=q; update(); }); qEl.appendChild(b);
+  });
+}
+SOURCES.forEach(s=>{
+  const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=s.label; b.dataset.id=s.id;
+  b.addEventListener('click',()=>{ source=s.id; markSources(); update(); }); srcEl.appendChild(b);
+});
+function markSources(){ [...srcEl.children].forEach(b=>b.setAttribute('aria-pressed', b.dataset.id===source?'true':'false')); }
+
+function baseLabel(){
+  const t=currentCard().type;
+  if(t==='family') return 'Отдельно стоило бы, ₽';
+  return mode==='renew' ? 'Цена для новых, ₽' : 'Старая цена, ₽';
+}
 function pick(id){
-  const c = CARDS.find(x=>x.id===id); current=id;
+  const c = cardsOf(mode).find(x=>x.id===id); picked[mode]=id;
   $('dur').value=c.dur; $('price').value=rub(c.price); $('base').value=c.base?rub(c.base):'';
   $('feats').value=c.feats.join('\n'); $('tag').value=c.tag||'';
   [...cardsEl.children].forEach(b=>b.setAttribute('aria-pressed', b.dataset.id===id?'true':'false'));
+  $('lbl-base').textContent = baseLabel();
   update();
 }
 
+function applyModeUI(){
+  document.querySelectorAll('[data-only]').forEach(el=>el.hidden = el.dataset.only!==mode);
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', t.dataset.mode===mode?'true':'false'));
+  $('lbl-price').textContent = mode==='renew' ? 'Цена продления, ₽' : 'Цена, ₽';
+  $('lbl-base').textContent  = baseLabel();
+  $('base').placeholder = mode==='renew' ? 'не показывать' : 'если даёте скидку';
+}
+
+function switchMode(m){
+  if(m===mode) return;
+  saved[mode] = Object.fromEntries(MODE_FIELDS.map(k=>[k,$(k).value]));
+  const carryName = $('name').value;
+  mode=m; applyModeUI(); renderCards();
+  if(saved[mode]){ MODE_FIELDS.forEach(k=>$(k).value=saved[mode][k]); applyModeUI(); update(); }
+  else { $('question').value=QUESTIONS[mode][0]; $('pay').value=PAY[mode]; $('name').value=carryName; pick(picked[mode]); }
+  store('kp_mode',mode);
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchMode(t.dataset.mode)));
+
 function data(){
-  const v={}; F.forEach(k=>v[k]=$(k).value.trim());
+  const v={}; MODE_FIELDS.concat(['mgr','address','zones']).forEach(k=>v[k]=$(k).value.trim());
+  if(mode==='new') v.until=v.until2;
   v.priceN=num(v.price); v.baseN=num(v.base);
   v.featList=v.feats.split('\n').map(s=>s.trim()).filter(Boolean);
+  v.zoneList=v.zones.split('\n').map(s=>s.trim()).filter(Boolean);
+  const c=currentCard(); v.type=c.type; v.age=c.age||'';
   return v;
 }
 
-function buildMsg(v){
-  const L=[];
-  const greet = v.name ? `Добрый день, ${v.name}!` : 'Добрый день!';
-  L.push(`${greet} Это ${v.mgr||'менеджер'}, фитнес-клуб «Маяк».`);
-  L.push(v.endDate
-    ? `Ваша карта заканчивается ${v.endDate}, и для вас есть специальная цена на продление:`
-    : 'Для вас как для нашего клиента есть специальная цена на продление:');
-  L.push('');
-  let offer = `${v.tag ? v.tag+': ' : ''}*${v.dur||'Клубная карта'}${v.priceN ? ' — '+rub(v.priceN)+' ₽' : ''}*`;
-  if (v.baseN && v.priceN && v.baseN>v.priceN) offer += ` (для новых клиентов ${rub(v.baseN)} ₽)`;
-  L.push(offer);
-  v.featList.forEach(f=>L.push('• '+f));
-  if (v.until){ L.push(''); L.push(`Цена действует до ${v.until}.`); }
-  L.push('');
-  L.push(v.question||'Планируете продолжать занятия?');
-  return L.join('\n');
+/* ---------- тексты сообщений ---------- */
+const priceTxt = v => v.priceN ? rub(v.priceN)+' ₽' : '';
+const dash = v => v.priceN ? ' — '+priceTxt(v) : '';
+const lowerFirst = s => s ? s[0].toLowerCase()+s.slice(1) : s;
+const featLines = v => v.featList.map(f => hasEmoji(f) ? f : '• '+f);
+function zonesCompact(v){
+  if(!v.zoneList.length) return [];
+  return ['В вашем распоряжении все зоны клуба: '+v.zoneList.map(z=>lowerFirst(stripEmoji(z))).join(', ')+'.'];
+}
+function zonesFull(v){
+  if(!v.zoneList.length) return [];
+  return ['В «Маяке» всё для тренировок под одной крышей:', ...v.zoneList];
+}
+function clubInfo(v){
+  const L=[`🕖 Клуб работает ${CLUB_HOURS}`, `📞 Отдел продаж на связи ${SALES_HOURS}`];
+  if(v.address) L.push(`📍 ${v.address}`);
+  return L;
+}
+function blocks(...bs){ return bs.filter(b=>b && b.length).map(b=>b.join('\n')).join('\n\n'); }
+const greetRenew = v => `${v.name ? `Добрый день, ${v.name}!` : 'Добрый день!'} Это ${v.mgr||'менеджер'}, фитнес-клуб «Маяк».`;
+const greetNew = v => `${v.name ? `Здравствуйте, ${v.name}!` : 'Здравствуйте!'} Это ${v.mgr||'менеджер'}, фитнес-клуб «Маяк».`;
+const untilLine = (v,word) => v.until ? [`${word} действует до ${v.until}.`] : [];
+const cheaper = v => v.baseN && v.priceN && v.baseN>v.priceN;
+
+function buildRenew(v){
+  const q=[v.question||QUESTIONS.renew[0]], pay=v.pay?[v.pay]:[];
+  if(v.type==='family'){
+    const intro = v.endDate ? `Ваша семейная карта заканчивается ${v.endDate}. Предлагаю продлить её на выгодных условиях:` : 'Предлагаю продлить вашу семейную карту на выгодных условиях:';
+    const offer=[`*Семейная карта, ${v.dur||'12 месяцев'}${dash(v)}*`, FAMILY_COMBO, ...featLines(v)];
+    const save = cheaper(v) ? [`Если оформлять взрослую и детскую карты отдельно, вышло бы от ${rub(v.baseN)} ₽.`] : [];
+    return blocks([greetRenew(v), intro], offer, save, untilLine(v,'Цена'), pay, q);
+  }
+  if(v.type==='kids'){
+    const intro = v.endDate ? `Детская карта вашего ребёнка заканчивается ${v.endDate}. Предлагаю продлить её:` : 'Предлагаю продлить детскую карту вашего ребёнка:';
+    const offer=[`*Детская карта${v.age?' ('+v.age+')':''}, ${v.dur||'12 месяцев'}${dash(v)}*`, ...featLines(v)];
+    return blocks([greetRenew(v), intro], offer, untilLine(v,'Цена'), pay, q);
+  }
+  const intro = v.endDate ? `Ваша карта заканчивается ${v.endDate}, и для вас есть специальная цена на продление:` : 'Для вас как для нашего клиента есть специальная цена на продление:';
+  let o = `${v.tag ? v.tag+': ' : ''}*${v.dur||'Клубная карта'}${dash(v)}*`;
+  if (cheaper(v)) o += ` (для новых клиентов ${rub(v.baseN)} ₽)`;
+  return blocks([greetRenew(v), intro], [o, ...featLines(v)], untilLine(v,'Цена'), pay, q);
+}
+
+function buildNew(v){
+  const src = (SOURCES.find(s=>s.id===source) || SOURCES[0]).line;
+  const q=[v.question||QUESTIONS.new[0]], pay=v.pay?[v.pay]:[];
+  const old = cheaper(v) ? ` вместо ${rub(v.baseN)} ₽` : '';
+  if(v.type==='gold'){
+    const pitch=['Хочу предложить вам Gold — VIP-формат клубной карты «Маяка». Это максимум, что есть в клубе: всё наполнение клубной карты плюс персональная работа с тренером.'];
+    const offer=[`*${v.dur||'Gold'}: ${priceTxt(v)}*${old}`, ...featLines(v)];
+    return blocks([greetNew(v), src], pitch, offer, zonesCompact(v), untilLine(v,'Предложение'), clubInfo(v), pay, q);
+  }
+  if(v.type==='family'){
+    const pitch=['Семейная карта — чтобы тренироваться вместе с ребёнком и платить меньше:'];
+    const offer=[`*Семейная карта, ${v.dur||'12 месяцев'}${dash(v)}*`, FAMILY_COMBO, ...featLines(v)];
+    const save = cheaper(v) ? [`Если оформлять взрослую и детскую карты отдельно, вышло бы от ${rub(v.baseN)} ₽.`] : [];
+    return blocks([greetNew(v), src], pitch, offer, save, zonesFull(v), untilLine(v,'Предложение'), clubInfo(v), pay, q);
+  }
+  if(v.type==='kids'){
+    const pitch=[`Для вашего ребёнка${v.age?' ('+v.age+')':''} у нас есть детская карта:`];
+    const offer=[`*Детская карта, ${v.dur||'12 месяцев'}${dash(v)}*${old}`, ...featLines(v)];
+    return blocks([greetNew(v), src], pitch, offer, untilLine(v,'Предложение'), clubInfo(v), pay, q);
+  }
+  const head = v.tag ? `Для вас сейчас действует ${v.tag.toLowerCase()}:` : 'Тариф для вас:';
+  const offer=[head, `*${v.dur||'Клубная карта'}${dash(v)}*${old}`, ...featLines(v)];
+  return blocks([greetNew(v), src], zonesFull(v), offer, untilLine(v,'Предложение'), clubInfo(v), pay, q);
 }
 
 function waHref(){
@@ -227,10 +414,12 @@ function waHref(){
   return `https://wa.me/${p}?text=${encodeURIComponent($('msg').value)}`;
 }
 
-/* ---------- canvas KP ---------- */
+/* ---------- картинки ---------- */
 const cv=$('cv'), ctx=cv.getContext('2d');
-const W=1080,H=1350, PAD=72;
-const C={bg:'#0d0e11',panel:'#17191e',line:'#2c3039',fg:'#f2f3f5',muted:'#9aa1ad',red:'#e0262b',redDeep:'#9e1418'};
+const W=1080, PAD=72; let H=1350;
+const RED={accent:'#e0262b',deep:'#9e1418',glow:'rgba(224,38,43,0.28)',bg:'#0d0e11'};
+const GOLD={accent:'#d9b25a',deep:'#8a6a24',glow:'rgba(217,178,90,0.24)',bg:'#0b0a08'};
+const C={panel:'#17191e',line:'#2c3039',fg:'#f2f3f5',muted:'#9aa1ad'};
 const DISP='"Oswald","Arial Narrow",Arial,sans-serif', BODY='"Golos Text",Arial,sans-serif';
 
 function wrap(text,maxW){
@@ -239,117 +428,269 @@ function wrap(text,maxW){
   if(line) lines.push(line); return lines;
 }
 function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
-function fitFont(text,weight,family,size,maxW,min){ let s=size; do{ ctx.font=`${weight} ${s}px ${family}`; if(ctx.measureText(text).width<=maxW) break; s-=4; }while(s>min); return s; }
+function fitFont(text,weight,family,size,maxW,min){ let s=size; do{ ctx.font=`${weight} ${s}px ${family}`; if(ctx.measureText(text).width<=maxW) break; s-=2; }while(s>min); return s; }
+function ellipsize(text,maxW){ if(ctx.measureText(text).width<=maxW) return text; let t=text; while(t.length>1 && ctx.measureText(t+'…').width>maxW) t=t.slice(0,-1); return t+'…'; }
+function gradFill(x0,y0,x1,y1,a,b){ const g=ctx.createLinearGradient(x0,y0,x1,y1); g.addColorStop(0,a); g.addColorStop(1,b); return g; }
 
-function draw(v){
-  ctx.fillStyle=C.bg; ctx.fillRect(0,0,W,H);
-  const g=ctx.createRadialGradient(W*0.9,90,20,W*0.9,90,700); g.addColorStop(0,'rgba(224,38,43,0.28)'); g.addColorStop(1,'rgba(224,38,43,0)');
+function drawBackground(v, T, tag){
+  cv.height=H;
+  ctx.fillStyle=T.bg; ctx.fillRect(0,0,W,H);
+  const g=ctx.createRadialGradient(W*0.9,90,20,W*0.9,90,720); g.addColorStop(0,T.glow); g.addColorStop(1,'rgba(0,0,0,0)');
   ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-  ctx.textBaseline='alphabetic';
-
-  // brand
-  ctx.fillStyle=C.red; ctx.font=`700 64px ${DISP}`; ctx.fillText('МАЯК',PAD,PAD+56);
+  ctx.textBaseline='alphabetic'; ctx.textAlign='left';
+  ctx.fillStyle=T.accent; ctx.font=`700 64px ${DISP}`; ctx.fillText('МАЯК',PAD,PAD+56);
   ctx.fillStyle=C.muted; ctx.font=`500 22px ${BODY}`; ctx.fillText('Ф И Т Н Е С   К Л У Б',PAD,PAD+92);
-  if(v.tag){
-    ctx.font=`600 26px ${DISP}`; const t=v.tag.toUpperCase(); const tw=ctx.measureText(t).width+44;
-    ctx.fillStyle=C.red; rr(W-PAD-tw,PAD+14,tw,54,27); ctx.fill();
-    ctx.fillStyle='#fff'; ctx.fillText(t,W-PAD-tw+22,PAD+50);
+  if(tag){
+    ctx.font=`600 26px ${DISP}`; const t=tag.toUpperCase(); const tw=ctx.measureText(t).width+44;
+    ctx.fillStyle=T.accent; rr(W-PAD-tw,PAD+14,tw,54,27); ctx.fill();
+    ctx.fillStyle=T===GOLD?'#16120a':'#fff'; ctx.fillText(t,W-PAD-tw+22,PAD+50);
   }
+}
 
-  // title
-  let y=PAD+220;
-  ctx.fillStyle=C.fg; ctx.font=`700 118px ${DISP}`; ctx.fillText('ПРОДЛЕНИЕ',PAD,y);
-  y+=96; ctx.fillStyle=C.red; ctx.font=`700 84px ${DISP}`; ctx.fillText('КЛУБНОЙ КАРТЫ',PAD,y);
-  y+=18; ctx.fillStyle=C.red; ctx.fillRect(PAD,y,W-PAD*2,3);
-  y+=58;
-  ctx.fillStyle=C.muted; ctx.font=`500 34px ${BODY}`;
-  ctx.fillText(v.name ? `Специальное предложение для: ${v.name}` : 'Специальная цена для наших клиентов', PAD, y);
+function drawTitle(l1, l2, T, y, s1max=118, s2max=84){
+  const s1=fitFont(l1,'700',DISP,s1max,W-PAD*2,56);
+  ctx.fillStyle=C.fg; ctx.font=`700 ${s1}px ${DISP}`; ctx.fillText(l1,PAD,y);
+  y+=Math.round(s2max*1.12); const s2=fitFont(l2,'700',DISP,s2max,W-PAD*2,44);
+  ctx.fillStyle=T.accent; ctx.font=`700 ${s2}px ${DISP}`; ctx.fillText(l2,PAD,y);
+  y+=18; ctx.fillRect(PAD,y,W-PAD*2,3);
+  return y;
+}
+function drawSub(text,y,size=32){ ctx.fillStyle=C.muted; ctx.font=`500 ${size}px ${BODY}`; ctx.fillText(ellipsize(text,W-PAD*2),PAD,y); }
+const subText = (v,fallback) => v.name ? `Специальное предложение для: ${v.name}` : fallback;
 
-  // offer block
-  const feats=(v.featList.length?v.featList:['Клубная карта «Маяк»']).slice(0,6);
-  const many=feats.length>4, fs=many?28:34, step=many?50:68;
+// блок «срок + что входит» для обычных карт
+function drawOffer(v, by, o, T=RED){
+  const feats=(v.featList.length?v.featList:['Клубная карта «Маяк»']).slice(0,o.maxFeats);
+  const many=feats.length>4, fs=many?o.fsSmall:o.fs, step=many?o.stepSmall:o.step;
   const dur=v.dur||'Клубная карта';
   const m=dur.match(/^(\d+)\s*([^,—-]*)(.*)$/);
   const rest=m?(m[3]||'').replace(/^[,\s—-]+/,'').trim():'';
-  const bx=PAD, by=y+40, bw=W-PAD*2, lw=300;
-  const bh=Math.max(rest?380:300, (feats.length-1)*step+fs+110);
+  const bx=PAD, bw=W-PAD*2, lw=o.lw;
+  const bh=Math.max(rest?o.minH+60:o.minH, (feats.length-1)*step+fs+o.vpad);
   ctx.fillStyle=C.panel; rr(bx,by,bw,bh,18); ctx.fill();
   ctx.save(); rr(bx,by,bw,bh,18); ctx.clip();
-  const lg=ctx.createLinearGradient(bx,by,bx,by+bh); lg.addColorStop(0,C.red); lg.addColorStop(1,C.redDeep);
-  ctx.fillStyle=lg; ctx.fillRect(bx,by,lw,bh); ctx.restore();
+  ctx.fillStyle=gradFill(bx,by,bx,by+bh,T.accent,T.deep); ctx.fillRect(bx,by,lw,bh); ctx.restore();
   ctx.strokeStyle=C.line; ctx.lineWidth=2; rr(bx,by,bw,bh,18); ctx.stroke();
-
   ctx.fillStyle='#fff'; ctx.textAlign='center';
   if(m){
     const n=m[1]; const word=(m[2]||'').trim().toUpperCase();
-    const s=fitFont(n,'700',DISP,190,lw-40,90);
-    const restLines = rest ? (ctx.font=`500 24px ${BODY}`, wrap(rest,lw-40).slice(0,2)) : [];
-    const ch = s*0.72 + 52 + restLines.length*32 + (restLines.length?10:0);
+    const s=fitFont(n,'700',DISP,o.numSize,lw-40,80);
+    const restLines = rest ? (ctx.font=`500 22px ${BODY}`, wrap(rest,lw-36).slice(0,2)) : [];
+    const ch = s*0.72 + 48 + restLines.length*28 + (restLines.length?8:0);
     let ty = by + (bh-ch)/2 + s*0.72;
     ctx.font=`700 ${s}px ${DISP}`; ctx.fillText(n,bx+lw/2,ty);
-    ty+=52; ctx.font=`600 36px ${DISP}`; ctx.fillText(word,bx+lw/2,ty);
-    ty+=10; ctx.font=`500 24px ${BODY}`; restLines.forEach(l=>{ ty+=32; ctx.fillText(l,bx+lw/2,ty); });
+    ty+=48; ctx.font=`600 32px ${DISP}`; ctx.fillText(word,bx+lw/2,ty);
+    ty+=8; ctx.font=`500 22px ${BODY}`; restLines.forEach(l=>{ ty+=28; ctx.fillText(l,bx+lw/2,ty); });
   } else {
-    const up=dur.toUpperCase(); let fsz=46;
+    const up=dur.toUpperCase();
     const longest=up.split(/\s+/).reduce((a,w)=>w.length>a.length?w:a,'');
-    fsz=fitFont(longest,'700',DISP,46,lw-36,22);
+    const fsz=fitFont(longest,'700',DISP,44,lw-36,22);
     ctx.font=`700 ${fsz}px ${DISP}`; const ls=wrap(up,lw-36).slice(0,4); const lh=fsz*1.18;
     const sy=by+bh/2-(ls.length-1)*lh/2+fsz*0.36; ls.forEach((l,i)=>ctx.fillText(l,bx+lw/2,sy+i*lh));
   }
   ctx.textAlign='left';
-
-  // features, centred vertically in the panel
-  const fx=bx+lw+44, fw=bw-lw-80;
+  const fx=bx+lw+40, fw=bw-lw-70;
   let fy=by+(bh-(feats.length-1)*step)/2+fs*0.35;
   ctx.font=`500 ${fs}px ${BODY}`;
   feats.forEach(f=>{
-    ctx.fillStyle=C.red; ctx.beginPath(); ctx.arc(fx+8,fy-fs*0.33,7,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=C.fg; ctx.fillText(wrap(f,fw-34)[0],fx+34,fy); fy+=step;
+    if(!hasEmoji(f)){ ctx.fillStyle=T.accent; ctx.beginPath(); ctx.arc(fx+8,fy-fs*0.33,6,0,Math.PI*2); ctx.fill(); }
+    ctx.fillStyle=C.fg; ctx.fillText(ellipsize(f,fw-32),hasEmoji(f)?fx:fx+30,fy); fy+=step;
   });
+  return by+bh;
+}
 
-  // price
-  const ly=by+bh+68;
-  ctx.fillStyle=C.red; ctx.font=`600 30px ${DISP}`; ctx.fillText('ВАША ЦЕНА ПРОДЛЕНИЯ',PAD,ly);
-  const py=ly+138;
-  const priceTxt = v.priceN ? rub(v.priceN)+' ₽' : '— ₽';
-  const ps=fitFont(priceTxt,'700',DISP,150,600,80);
-  ctx.fillStyle=C.fg; ctx.font=`700 ${ps}px ${DISP}`; ctx.fillText(priceTxt,PAD,py);
-  const pw=ctx.measureText(priceTxt).width;
-  if(v.baseN && v.priceN && v.baseN>v.priceN){
+function drawPrice(v, label, ly, size, oldLabel, T=RED){
+  ctx.fillStyle=T.accent; ctx.font=`600 30px ${DISP}`; ctx.fillText(label,PAD,ly);
+  const py=ly+Math.round(size*0.92);
+  const pt = v.priceN ? rub(v.priceN)+' ₽' : '— ₽';
+  const ps=fitFont(pt,'700',DISP,size,600,80);
+  ctx.fillStyle=C.fg; ctx.font=`700 ${ps}px ${DISP}`; ctx.fillText(pt,PAD,py);
+  const pw=ctx.measureText(pt).width;
+  if(cheaper(v)){
     const ox=PAD+pw+44; const ot=rub(v.baseN)+' ₽';
-    ctx.fillStyle=C.muted; ctx.font=`500 28px ${BODY}`; ctx.fillText('для новых клиентов',ox,py-62);
-    ctx.font=`600 52px ${DISP}`; ctx.fillText(ot,ox,py-4);
-    const ow=ctx.measureText(ot).width; ctx.strokeStyle=C.red; ctx.lineWidth=4;
-    ctx.beginPath(); ctx.moveTo(ox-4,py-20); ctx.lineTo(ox+ow+4,py-24); ctx.stroke();
+    ctx.fillStyle=C.muted; ctx.font=`500 26px ${BODY}`; ctx.fillText(oldLabel,ox,py-58);
+    ctx.font=`600 48px ${DISP}`; ctx.fillText(ot,ox,py-4);
+    const ow=ctx.measureText(ot).width; ctx.strokeStyle=T.accent; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.moveTo(ox-4,py-18); ctx.lineTo(ox+ow+4,py-22); ctx.stroke();
   }
-  if(v.until){ ctx.fillStyle=C.fg; ctx.font=`600 32px ${BODY}`; ctx.fillText(`Цена действует до ${v.until}`,PAD,py+66); }
+  return py;
+}
+function drawTerms(v, y, word){
+  if(v.until){ ctx.fillStyle=C.fg; ctx.font=`600 30px ${BODY}`; ctx.fillText(`${word} действует до ${v.until}`,PAD,y); y+=44; }
+  const s=fitFont(PAY_IMG[mode],'500',BODY,25,W-PAD*2,18);
+  ctx.fillStyle=C.muted; ctx.font=`500 ${s}px ${BODY}`; ctx.fillText(PAY_IMG[mode],PAD,y);
+}
 
-  // footer
-  const fy2=H-PAD-40;
-  ctx.fillStyle=C.line; ctx.fillRect(PAD,fy2-30,W-PAD*2,2);
-  ctx.fillStyle=C.muted; ctx.font=`500 26px ${BODY}`;
-  ctx.fillText(v.mgr ? `${v.mgr}, фитнес-клуб «Маяк»` : 'Фитнес-клуб «Маяк»', PAD, fy2+16);
-  ctx.textAlign='right'; ctx.fillText('Ваш фитнес. Ваш ритм. Ваш результат.', W-PAD, fy2+16); ctx.textAlign='left';
+function drawFooter(v){
+  const fy=H-PAD;
+  ctx.textAlign='left';
+  if(mode==='new'){
+    ctx.fillStyle=C.line; ctx.fillRect(PAD,fy-86,W-PAD*2,2);
+    ctx.fillStyle=C.fg; ctx.font=`600 27px ${BODY}`;
+    ctx.fillText(ellipsize(v.address||'Фитнес-клуб «Маяк»',(W-PAD*2)*0.66),PAD,fy-42);
+    ctx.fillStyle=C.muted; ctx.font=`500 23px ${BODY}`;
+    ctx.fillText(`Клуб ${CLUB_HOURS_SHORT} · отдел продаж ${SALES_HOURS_SHORT} · ежедневно`,PAD,fy-6);
+    if(v.mgr){ ctx.textAlign='right'; ctx.font=`500 25px ${BODY}`; ctx.fillText(ellipsize(`${v.mgr}, «Маяк»`,(W-PAD*2)*0.32),W-PAD,fy-42); ctx.textAlign='left'; }
+  } else {
+    ctx.fillStyle=C.line; ctx.fillRect(PAD,fy-62,W-PAD*2,2);
+    ctx.fillStyle=C.muted; ctx.font=`500 26px ${BODY}`;
+    ctx.fillText(ellipsize(v.mgr ? `${v.mgr}, фитнес-клуб «Маяк»` : 'Фитнес-клуб «Маяк»',(W-PAD*2)*0.55),PAD,fy-18);
+    ctx.textAlign='right'; ctx.fillText('Ваш фитнес. Ваш ритм. Ваш результат.',W-PAD,fy-18); ctx.textAlign='left';
+  }
+}
 
+/* обычная карта — продление */
+function drawStdRenew(v){
+  H=1350; drawBackground(v,RED,v.tag);
+  let y=drawTitle('ПРОДЛЕНИЕ','КЛУБНОЙ КАРТЫ',RED,PAD+220,118,84);
+  y+=56; drawSub(subText(v,'Специальная цена для наших клиентов'),y,34);
+  const bottom=drawOffer(v, y+38, {maxFeats:6,fs:34,fsSmall:28,step:66,stepSmall:50,lw:300,minH:290,vpad:100,numSize:190});
+  const py=drawPrice(v,'ВАША ЦЕНА ПРОДЛЕНИЯ',bottom+66,146,'для новых клиентов');
+  drawTerms(v,py+60,'Цена');
+  drawFooter(v);
+}
+
+/* обычная карта — новый клиент */
+function drawStdNew(v){
+  H=1440; drawBackground(v,RED,v.tag);
+  let y=drawTitle('ДОБРО ПОЖАЛОВАТЬ','В «МАЯК»',RED,PAD+196,104,76);
+  y+=48; drawSub(subText(v,'Всё для тренировок под одной крышей'),y,30);
+  y=drawZones(v,y+22);
+  const bottom=drawOffer(v, y+26, {maxFeats:6,fs:28,fsSmall:25,step:46,stepSmall:38,lw:260,minH:210,vpad:80,numSize:150});
+  const py=drawPrice(v,'ВАША ЦЕНА',bottom+58,120,'обычная цена');
+  drawTerms(v,py+52,'Предложение');
+  drawFooter(v);
+}
+function drawZones(v,y){
+  const zones=v.zoneList.slice(0,8); if(!zones.length) return y;
+  const colW=(W-PAD*2)/2, rows=Math.ceil(zones.length/2), rh=46;
+  ctx.font=`500 28px ${BODY}`;
+  zones.forEach((z,i)=>{
+    const col=i<rows?0:1, row=i<rows?i:i-rows;
+    const x=PAD+col*colW, yy=y+32+row*rh;
+    if(!hasEmoji(z)){ ctx.fillStyle=RED.accent; ctx.fillRect(x,yy-18,14,3); }
+    ctx.fillStyle=C.fg; ctx.fillText(ellipsize(z,colW-30),hasEmoji(z)?x:x+26,yy);
+  });
+  return y+32+(rows-1)*rh+12;
+}
+
+/* Gold — VIP */
+function drawGold(v){
+  H=1440; drawBackground(v,GOLD,'VIP');
+  let y=PAD+360;
+  ctx.font=`700 270px ${DISP}`;
+  ctx.fillStyle=gradFill(0,y-220,0,y,'#f6dc8c','#a87b26'); ctx.fillText('GOLD',PAD-8,y);
+  const sub=(v.dur||'').replace(/^gold\s*[—–-]\s*/i,'').toUpperCase() || 'КЛУБНАЯ КАРТА';
+  y+=82; const s=fitFont(sub,'600',DISP,66,W-PAD*2,36);
+  ctx.fillStyle=C.fg; ctx.font=`600 ${s}px ${DISP}`; ctx.fillText(sub,PAD,y);
+  y+=24; ctx.fillStyle=GOLD.accent; ctx.fillRect(PAD,y,W-PAD*2,2);
+  y+=52; drawSub(v.name?`Специальное предложение для: ${v.name}`:'Максимальный формат клубной карты «Маяк»',y,30);
+  // плитки преимуществ
+  const feats=(v.featList.length?v.featList:['Клубная карта «Маяк»']).slice(0,8);
+  const gap=16, tw=(W-PAD*2-gap)/2, th=96, rows=Math.ceil(feats.length/2);
+  let ty=y+34;
+  feats.forEach((f,i)=>{
+    const x=PAD+(i%2)*(tw+gap), yy=ty+Math.floor(i/2)*(th+gap);
+    ctx.fillStyle='#16130c'; rr(x,yy,tw,th,14); ctx.fill();
+    ctx.strokeStyle='rgba(217,178,90,0.55)'; ctx.lineWidth=2; rr(x,yy,tw,th,14); ctx.stroke();
+    const mm=f.match(EMOJI_RE); const em=mm?mm[1]:''; const txt=stripEmoji(f);
+    let tx=x+22;
+    if(em){ ctx.font=`40px ${BODY}`; ctx.fillStyle=C.fg; ctx.fillText(em,tx,yy+th/2+14); tx+=60; }
+    ctx.font=`600 27px ${BODY}`; ctx.fillStyle=C.fg;
+    const ls=wrap(txt,x+tw-tx-16).slice(0,2);
+    const base=yy+th/2+10-(ls.length-1)*16; ls.forEach((l,k)=>ctx.fillText(l,tx,base+k*32));
+  });
+  const bottom=ty+rows*th+(rows-1)*gap;
+  const py=drawPrice(v,'ВАША ЦЕНА',bottom+62,128,'обычная цена',GOLD);
+  drawTerms(v,py+52,'Предложение');
+  drawFooter(v);
+}
+
+/* Семейная карта */
+function drawFamily(v){
+  H=1350; drawBackground(v,RED,v.tag);
+  let y=drawTitle('СЕМЕЙНАЯ КАРТА', mode==='renew'?'ПРОДЛЕНИЕ':'ДЛЯ ВАС И РЕБЁНКА', RED, PAD+200, 108, 76);
+  y+=50; drawSub(subText(v, mode==='renew'?'Специальная цена для наших клиентов':'Тренируйтесь вместе и платите меньше'),y,30);
+  // 1 взрослая + 1 детская
+  const ty=y+34, th=230, plusW=110, tw=(W-PAD*2-plusW)/2;
+  const tile=(x,title,sub)=>{
+    ctx.fillStyle=gradFill(x,ty,x,ty+th,RED.accent,RED.deep); rr(x,ty,tw,th,18); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.textAlign='center';
+    ctx.font=`700 120px ${DISP}`; ctx.fillText('1',x+tw/2,ty+118);
+    ctx.font=`600 36px ${DISP}`; ctx.fillText(title,x+tw/2,ty+168);
+    ctx.font=`500 24px ${BODY}`; ctx.fillStyle='#ffd9da'; ctx.fillText(sub,x+tw/2,ty+204);
+    ctx.textAlign='left';
+  };
+  tile(PAD,'ВЗРОСЛАЯ КАРТА','для вас');
+  ctx.fillStyle=C.fg; ctx.textAlign='center'; ctx.font=`700 96px ${DISP}`; ctx.fillText('+',PAD+tw+plusW/2,ty+th/2+34); ctx.textAlign='left';
+  tile(PAD+tw+plusW,'ДЕТСКАЯ КАРТА','ребёнок до 14 лет');
+  // плашки: срок и условия
+  const pills=[`🗓 ${v.dur||'12 месяцев'}`, ...v.featList];
+  let px=PAD, py0=ty+th+30; const ph=60;
+  ctx.font=`500 27px ${BODY}`;
+  pills.forEach(p=>{
+    const w=Math.min(ctx.measureText(p).width+44, W-PAD*2);
+    if(px+w>W-PAD){ px=PAD; py0+=ph+12; }
+    ctx.fillStyle=C.panel; rr(px,py0,w,ph,30); ctx.fill(); ctx.strokeStyle=C.line; ctx.lineWidth=2; rr(px,py0,w,ph,30); ctx.stroke();
+    ctx.fillStyle=C.fg; ctx.fillText(ellipsize(p,w-44),px+22,py0+40); px+=w+12;
+  });
+  const py=drawPrice(v, mode==='renew'?'ЦЕНА ПРОДЛЕНИЯ ЗА ДВЕ КАРТЫ':'ЦЕНА ЗА ДВЕ КАРТЫ', py0+ph+66, 128, 'по отдельности от');
+  drawTerms(v,py+52, mode==='renew'?'Цена':'Предложение');
+  drawFooter(v);
+}
+
+/* Детская карта */
+function drawKids(v){
+  H=1350; drawBackground(v,RED,v.tag);
+  const age=(v.age||'').toUpperCase();
+  let y=drawTitle('ДЕТСКАЯ КАРТА', mode==='renew' ? ('ПРОДЛЕНИЕ'+(age?' · '+age:'')) : (age||'ДЛЯ ВАШЕГО РЕБЁНКА'), RED, PAD+200, 108, 76);
+  y+=50; drawSub(subText(v,'Спорт для ребёнка с первых лет'),y,30);
+  const feats=v.featList.length?v.featList:['Детская карта «Маяк»'];
+  const big=feats.slice(0,2), small=[`🗓 ${v.dur||'12 месяцев'}`, ...feats.slice(2)];
+  let ty=y+34; const th=136;
+  big.forEach(f=>{
+    ctx.fillStyle=C.panel; rr(PAD,ty,W-PAD*2,th,18); ctx.fill();
+    ctx.fillStyle=RED.accent; rr(PAD,ty,10,th,5); ctx.fill();
+    const mm=f.match(EMOJI_RE); const em=mm?mm[1]:''; const txt=stripEmoji(f);
+    let tx=PAD+40;
+    if(em){ ctx.font=`64px ${BODY}`; ctx.fillStyle=C.fg; ctx.fillText(em,tx,ty+th/2+22); tx+=96; }
+    ctx.font=`700 36px ${BODY}`; ctx.fillStyle=C.fg;
+    const ls=wrap(txt.toUpperCase()===txt?txt:txt, W-PAD-tx-30).slice(0,2);
+    const base=ty+th/2+12-(ls.length-1)*21; ls.forEach((l,k)=>ctx.fillText(l,tx,base+k*42));
+    ty+=th+16;
+  });
+  ctx.font=`500 28px ${BODY}`; ctx.fillStyle=C.muted;
+  ctx.fillText(ellipsize(small.join('   ·   '),W-PAD*2),PAD,ty+30);
+  const py=drawPrice(v, mode==='renew'?'ЦЕНА ПРОДЛЕНИЯ':'ВАША ЦЕНА', ty+100, 128, mode==='renew'?'для новых клиентов':'обычная цена');
+  drawTerms(v,py+52, mode==='renew'?'Цена':'Предложение');
+  drawFooter(v);
+}
+
+function draw(v){
+  if(v.type==='gold') drawGold(v);
+  else if(v.type==='family') drawFamily(v);
+  else if(v.type==='kids') drawKids(v);
+  else (mode==='renew'?drawStdRenew:drawStdNew)(v);
   $('kpImg').src=cv.toDataURL('image/png');
 }
 
 let t=null;
 function update(){
   const v=data();
-  $('msg').value=buildMsg(v);
+  $('msg').value = mode==='renew' ? buildRenew(v) : buildNew(v);
   $('waLink').href=waHref();
   clearTimeout(t); t=setTimeout(()=>draw(v),120);
-  store('kp_mgr',v.mgr);
+  store('kp_mgr',v.mgr); store('kp_address2',v.address); store('kp_zones2',v.zones);
 }
 
-F.forEach(k=>$(k).addEventListener('input',()=>{
+MODE_FIELDS.concat(['mgr','address','zones']).forEach(k=>$(k).addEventListener('input',()=>{
   if(['dur','price','base','feats','tag'].includes(k)) [...cardsEl.children].forEach(b=>b.setAttribute('aria-pressed','false'));
   update();
 }));
 $('msg').addEventListener('input',()=>{$('waLink').href=waHref();});
 $('phone').addEventListener('input',()=>{$('waLink').href=waHref();});
 $('form').addEventListener('submit',e=>e.preventDefault());
+$('resetPay').addEventListener('click',()=>{ $('pay').value=PAY[mode]; update(); });
 
 function flash(el,txt){ el.textContent=txt; clearTimeout(el._t); el._t=setTimeout(()=>el.textContent='',3000); }
 
@@ -363,20 +704,18 @@ $('copyBtn').addEventListener('click',()=>{
 });
 
 function blobFromCanvas(){ return new Promise(r=>cv.toBlob(r,'image/png')); }
-
+function fileName(){
+  const v=data();
+  return ('KP_Mayak_'+(mode==='renew'?'prodlenie_':'novyi_')+(v.name||'klient')+'_'+(v.dur||'karta')).replace(/[^\wА-Яа-яЁё]+/g,'_').slice(0,80)+'.png';
+}
 $('copyImgBtn').addEventListener('click',()=>{
+  const fail=()=>flash($('imgStatus'),'Здесь копирование картинки не работает. Скачай её или зажми картинку.');
   try{
     if(!window.ClipboardItem || !navigator.clipboard || !navigator.clipboard.write) throw 0;
     navigator.clipboard.write([new ClipboardItem({'image/png':blobFromCanvas()})])
-      .then(()=>flash($('imgStatus'),'Картинка скопирована. Вставь её в чат.'))
-      .catch(()=>flash($('imgStatus'),'Здесь копирование картинки не работает. Сохрани её через «Скачать» или зажми картинку.'));
-  }catch(e){ flash($('imgStatus'),'Здесь копирование картинки не работает. Сохрани её через «Скачать» или зажми картинку.'); }
+      .then(()=>flash($('imgStatus'),'Картинка скопирована. Вставь её в чат.')).catch(fail);
+  }catch(e){ fail(); }
 });
-
-function fileName(){
-  const v=data();
-  return ('KP_Mayak_'+(v.name||'klient')+'_'+(v.dur||'karta')).replace(/[^\wА-Яа-яЁё]+/g,'_').slice(0,80)+'.png';
-}
 $('saveBtn').addEventListener('click',async()=>{
   try{
     const blob=await blobFromCanvas(); const url=URL.createObjectURL(blob);
@@ -394,22 +733,25 @@ $('saveBtn').addEventListener('click',async()=>{
 $('shareBtn').addEventListener('click',async()=>{
   try{
     const blob=await blobFromCanvas();
-    const file=new File([blob],fileName(),{type:'image/png'});
-    await navigator.share({files:[file]});
+    await navigator.share({files:[new File([blob],fileName(),{type:'image/png'})]});
   }catch(e){ if(!e || e.name!=='AbortError') flash($('imgStatus'),'Не получилось открыть меню. Скачай картинку и отправь её из галереи.'); }
 });
 
-// init
+// старт
 $('mgr').value = load('kp_mgr') || 'Павел';
-$('question').value = QUESTIONS[0];
-
-pick(current);
+$('address').value = load('kp_address2') || ADDRESS;
+$('zones').value = load('kp_zones2') || ZONES.join('\n');
+markSources();
+applyModeUI(); renderCards();
+$('question').value = QUESTIONS.renew[0];
+$('pay').value = PAY.renew;
+pick(picked.renew);
+if(load('kp_mode')==='new') switchMode('new');
 (document.fonts ? Promise.all([
   document.fonts.load(`700 100px Oswald`), document.fonts.load(`600 30px Oswald`),
   document.fonts.load(`500 30px "Golos Text"`), document.fonts.load(`600 30px "Golos Text"`)
 ]).catch(()=>{}) : Promise.resolve()).then(()=>draw(data()));
 </script>
-
 <script>
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 </script>
